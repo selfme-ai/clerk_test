@@ -1,13 +1,7 @@
 import React from 'react';
 import { Routes, Route, Link, Navigate } from 'react-router-dom';
-import { ClerkProvider, useAuth, useUser, SignIn, SignUp } from '@clerk/clerk-react';
+import { useAuth, useUser, SignIn, SignUp } from '@clerk/clerk-react';
 import './App.css';
-
-const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
-
-if (!PUBLISHABLE_KEY) {
-  throw new Error('Missing Publishable Key');
-}
 
 function Home() {
   const { isSignedIn } = useAuth();
@@ -156,18 +150,16 @@ function ProtectedPage({ children }: { children: React.ReactNode }) {
 
 function App() {
   return (
-    <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
-      <Routes>
-        <Route path="/" element={
-          <ProtectedPage>
-            <Home />
-          </ProtectedPage>
-        } />
-        <Route path="/sign-in/*" element={<SignInPage />} />
-        <Route path="/sign-up/*" element={<SignUpPage />} />
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
-    </ClerkProvider>
+    <Routes>
+      <Route path="/" element={
+        <ProtectedPage>
+          <Home />
+        </ProtectedPage>
+      } />
+      <Route path="/sign-in/*" element={<SignInPage />} />
+      <Route path="/sign-up/*" element={<SignUpPage />} />
+      <Route path="*" element={<Navigate to="/" />} />
+    </Routes>
   );
 }
 
