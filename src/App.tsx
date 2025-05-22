@@ -1,6 +1,6 @@
 import React from 'react';
 import { Routes, Route, Link, Navigate } from 'react-router-dom';
-import { useAuth, useUser, SignIn as ClerkSignIn, SignUp as ClerkSignUp } from '@clerk/clerk-react';
+import { useAuth, useUser, useSignIn, SignIn as ClerkSignIn, SignUp as ClerkSignUp } from '@clerk/clerk-react';
 import './App.css';
 
 function Home() {
@@ -36,6 +36,22 @@ function Home() {
 }
 
 function SignInPage() {
+  const { isLoaded } = useSignIn();
+  
+  // This effect prevents the duplicate code issue in Chrome
+  React.useEffect(() => {
+    if (!isLoaded) return;
+    
+    // This is a workaround for the duplicate code issue
+    // It ensures the verification flow is only started once
+    const searchParams = new URLSearchParams(window.location.search);
+    if (searchParams.has('__clerk_created_session')) {
+      searchParams.delete('__clerk_created_session');
+      const newUrl = `${window.location.pathname}?${searchParams.toString()}`;
+      window.history.replaceState({}, '', newUrl);
+    }
+  }, [isLoaded]);
+
   return (
     <div style={{
       display: 'flex',
@@ -57,6 +73,8 @@ function SignInPage() {
           path="/sign-in"
           routing="path"
           signUpUrl="/sign-up"
+          forceRedirectUrl="/"
+          afterSignInUrl="/"
           appearance={{
             elements: {
               formButtonPrimary: {
