@@ -1,6 +1,6 @@
 import React from 'react';
 import { Routes, Route, Link, Navigate } from 'react-router-dom';
-import { useAuth, useUser, useSignIn, SignIn as ClerkSignIn, SignUp as ClerkSignUp } from '@clerk/clerk-react';
+import { useAuth, useUser, useSignIn, useSignUp, SignIn as ClerkSignIn, SignUp as ClerkSignUp } from '@clerk/clerk-react';
 import './App.css';
 
 function Home() {
@@ -35,22 +35,50 @@ function Home() {
   );
 }
 
-function SignInPage() {
-  const { isLoaded } = useSignIn();
+// Custom component to handle verification state
+function useVerificationHandler() {
+  const { isLoaded: isSignInLoaded } = useSignIn();
+  const { isLoaded: isSignUpLoaded } = useSignUp();
+  const isLoaded = isSignInLoaded && isSignUpLoaded;
   
-  // This effect prevents the duplicate code issue in Chrome
   React.useEffect(() => {
     if (!isLoaded) return;
     
-    // This is a workaround for the duplicate code issue
-    // It ensures the verification flow is only started once
+    // Clean up any verification-related URL parameters
     const searchParams = new URLSearchParams(window.location.search);
-    if (searchParams.has('__clerk_created_session')) {
-      searchParams.delete('__clerk_created_session');
-      const newUrl = `${window.location.pathname}?${searchParams.toString()}`;
+    const hasVerificationParam = [
+      '__clerk_created_session',
+      '__clerk_status',
+      '__clerk_modal_state'
+    ].some(param => searchParams.has(param));
+    
+    if (hasVerificationParam) {
+      // Remove all Clerk-related params
+      ['__clerk_created_session', '__clerk_status', '__clerk_modal_state'].forEach(
+        param => searchParams.delete(param)
+      );
+      
+      const newUrl = searchParams.toString() 
+        ? `${window.location.pathname}?${searchParams.toString()}`
+        : window.location.pathname;
+      
+      // Use replaceState to prevent adding to browser history
       window.history.replaceState({}, '', newUrl);
+      
+      // Force a hard reload to reset Clerk's internal state
+      window.location.reload();
     }
   }, [isLoaded]);
+  
+  return isLoaded;
+}
+
+function SignInPage() {
+  const isVerificationReady = useVerificationHandler();
+  
+  if (!isVerificationReady) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div style={{
@@ -104,6 +132,12 @@ function SignInPage() {
 }
 
 function SignUpPage() {
+  const isVerificationReady = useVerificationHandler();
+  
+  if (!isVerificationReady) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div style={{
       display: 'flex',
@@ -127,6 +161,7 @@ function SignUpPage() {
           signInUrl="/sign-in"
           redirectUrl="/"
           afterSignUpUrl="/"
+          unsafeMetadata={{}}
           appearance={{
             elements: {
               formButtonPrimary: {
