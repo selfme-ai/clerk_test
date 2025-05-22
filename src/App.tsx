@@ -1,6 +1,6 @@
 import React from 'react';
 import { Routes, Route, Link, Navigate } from 'react-router-dom';
-import { useAuth, useUser, SignIn, SignUp } from '@clerk/clerk-react';
+import { useAuth, useUser, SignIn as ClerkSignIn, SignUp as ClerkSignUp } from '@clerk/clerk-react';
 import './App.css';
 
 function Home() {
@@ -45,8 +45,8 @@ function SignInPage() {
       backgroundColor: '#f5f5f5',
       padding: '20px'
     }}>
-      <SignIn 
-        path="/sign-in" 
+      <ClerkSignIn 
+        path="/sign-in"
         routing="path"
         signUpUrl="/sign-up"
         appearance={{
@@ -94,45 +94,12 @@ function SignUpPage() {
       backgroundColor: '#f5f5f5',
       padding: '20px'
     }}>
-      <SignUp 
+      <ClerkSignUp 
         path="/sign-up" 
         routing="path"
         signInUrl="/sign-in"
         redirectUrl="/"
         afterSignUpUrl="/"
-        unsafeMetadata={{
-          signup_source: 'web'
-        }}
-        appearance={{
-          elements: {
-            card: {
-              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-              borderRadius: '8px',
-              padding: '2rem',
-              backgroundColor: 'white',
-              width: '100%',
-              maxWidth: '400px'
-            },
-            formButtonPrimary: {
-              backgroundColor: '#4f46e5',
-              '&:hover': {
-                backgroundColor: '#4338ca'
-              },
-              width: '100%',
-              padding: '0.625rem',
-              borderRadius: '0.375rem',
-              fontWeight: '500',
-              fontSize: '0.875rem',
-              textTransform: 'none'
-            },
-            footerActionLink: {
-              color: '#4f46e5',
-              '&:hover': {
-                textDecoration: 'underline'
-              }
-            }
-          }
-        }}
       />
     </div>
   );
