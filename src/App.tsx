@@ -1,6 +1,7 @@
 import React from 'react';
 import { Routes, Route, Link, Navigate } from 'react-router-dom';
-import { useAuth, useUser, useSignIn, useSignUp, SignIn as ClerkSignIn, SignUp as ClerkSignUp } from '@clerk/clerk-react';
+import { useAuth, useUser, SignIn as ClerkSignIn, SignUp as ClerkSignUp } from '@clerk/clerk-react';
+import { useVerificationHandler } from './utils/verification-handler';
 import './App.css';
 
 function Home() {
@@ -35,48 +36,12 @@ function Home() {
   );
 }
 
-// Custom component to handle verification state
-function useVerificationHandler() {
-  const { isLoaded: isSignInLoaded } = useSignIn();
-  const { isLoaded: isSignUpLoaded } = useSignUp();
-  const isLoaded = isSignInLoaded && isSignUpLoaded;
-  
-  React.useEffect(() => {
-    if (!isLoaded) return;
-    
-    // Clean up any verification-related URL parameters
-    const searchParams = new URLSearchParams(window.location.search);
-    const hasVerificationParam = [
-      '__clerk_created_session',
-      '__clerk_status',
-      '__clerk_modal_state'
-    ].some(param => searchParams.has(param));
-    
-    if (hasVerificationParam) {
-      // Remove all Clerk-related params
-      ['__clerk_created_session', '__clerk_status', '__clerk_modal_state'].forEach(
-        param => searchParams.delete(param)
-      );
-      
-      const newUrl = searchParams.toString() 
-        ? `${window.location.pathname}?${searchParams.toString()}`
-        : window.location.pathname;
-      
-      // Use replaceState to prevent adding to browser history
-      window.history.replaceState({}, '', newUrl);
-      
-      // Force a hard reload to reset Clerk's internal state
-      window.location.reload();
-    }
-  }, [isLoaded]);
-  
-  return isLoaded;
-}
+// Verification handler is now in a separate file
 
 function SignInPage() {
-  const isVerificationReady = useVerificationHandler();
+  const isReady = useVerificationHandler();
   
-  if (!isVerificationReady) {
+  if (!isReady) {
     return <div>Loading...</div>;
   }
 
@@ -132,9 +97,9 @@ function SignInPage() {
 }
 
 function SignUpPage() {
-  const isVerificationReady = useVerificationHandler();
+  const isReady = useVerificationHandler();
   
-  if (!isVerificationReady) {
+  if (!isReady) {
     return <div>Loading...</div>;
   }
 
