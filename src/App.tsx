@@ -98,6 +98,11 @@ function SignUpPage() {
         path="/sign-up" 
         routing="path"
         signInUrl="/sign-in"
+        redirectUrl="/"
+        afterSignUpUrl="/"
+        unsafeMetadata={{
+          signup_source: 'web'
+        }}
         appearance={{
           elements: {
             card: {
