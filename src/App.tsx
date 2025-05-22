@@ -45,41 +45,42 @@ function SignInPage() {
       backgroundColor: '#f5f5f5',
       padding: '20px'
     }}>
-      <ClerkSignIn 
-        path="/sign-in"
-        routing="path"
-        signUpUrl="/sign-up"
-        appearance={{
-          elements: {
-            card: {
-              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-              borderRadius: '8px',
-              padding: '2rem',
-              backgroundColor: 'white',
-              width: '100%',
-              maxWidth: '400px'
-            },
-            formButtonPrimary: {
-              backgroundColor: '#4f46e5',
-              '&:hover': {
-                backgroundColor: '#4338ca'
+      <div style={{
+        width: '100%',
+        maxWidth: '400px',
+        backgroundColor: 'white',
+        borderRadius: '8px',
+        padding: '2rem',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+      }}>
+        <ClerkSignIn 
+          path="/sign-in"
+          routing="path"
+          signUpUrl="/sign-up"
+          appearance={{
+            elements: {
+              formButtonPrimary: {
+                backgroundColor: '#4f46e5',
+                '&:hover': {
+                  backgroundColor: '#4338ca'
+                },
+                width: '100%',
+                padding: '0.625rem',
+                borderRadius: '0.375rem',
+                fontWeight: '500',
+                fontSize: '0.875rem',
+                textTransform: 'none'
               },
-              width: '100%',
-              padding: '0.625rem',
-              borderRadius: '0.375rem',
-              fontWeight: '500',
-              fontSize: '0.875rem',
-              textTransform: 'none'
-            },
-            footerActionLink: {
-              color: '#4f46e5',
-              '&:hover': {
-                textDecoration: 'underline'
+              footerActionLink: {
+                color: '#4f46e5',
+                '&:hover': {
+                  textDecoration: 'underline'
+                }
               }
             }
-          }
-        }}
-      />
+          }}
+        />
+      </div>
     </div>
   );
 }
@@ -94,13 +95,44 @@ function SignUpPage() {
       backgroundColor: '#f5f5f5',
       padding: '20px'
     }}>
-      <ClerkSignUp 
-        path="/sign-up" 
-        routing="path"
-        signInUrl="/sign-in"
-        redirectUrl="/"
-        afterSignUpUrl="/"
-      />
+      <div style={{
+        width: '100%',
+        maxWidth: '400px',
+        backgroundColor: 'white',
+        borderRadius: '8px',
+        padding: '2rem',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+      }}>
+        <ClerkSignUp 
+          path="/sign-up" 
+          routing="path"
+          signInUrl="/sign-in"
+          redirectUrl="/"
+          afterSignUpUrl="/"
+          appearance={{
+            elements: {
+              formButtonPrimary: {
+                backgroundColor: '#4f46e5',
+                '&:hover': {
+                  backgroundColor: '#4338ca'
+                },
+                width: '100%',
+                padding: '0.625rem',
+                borderRadius: '0.375rem',
+                fontWeight: '500',
+                fontSize: '0.875rem',
+                textTransform: 'none'
+              },
+              footerActionLink: {
+                color: '#4f46e5',
+                '&:hover': {
+                  textDecoration: 'underline'
+                }
+              }
+            }
+          }}
+        />
+      </div>
     </div>
   );
 }

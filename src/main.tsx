@@ -13,14 +13,10 @@ if (!PUBLISHABLE_KEY) {
 
 createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <ClerkProvider 
-        publishableKey={PUBLISHABLE_KEY}
-        routerPush={(to) => window.history.pushState({}, '', to)}
-        routerReplace={(to) => window.history.replaceState({}, '', to)}
-      >
+    <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
+      <BrowserRouter>
         <App />
-      </ClerkProvider>
-    </BrowserRouter>
+      </BrowserRouter>
+    </ClerkProvider>
   </React.StrictMode>,
 );
