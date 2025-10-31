@@ -1,6 +1,8 @@
 import React from 'react';
 import { Routes, Route, Link, Navigate } from 'react-router-dom';
 import { useAuth, useUser, SignIn, SignUp } from '@clerk/clerk-react';
+import VerifySuccess from './pages/VerifySuccess';
+import HeadlessMagic from './pages/HeadlessMagic';
 import './App.css';
 
 function Home() {
@@ -47,7 +49,6 @@ function SignInPage() {
     }}>
       <SignIn 
         path="/sign-in" 
-        routing="path"
         signUpUrl="/sign-up"
         appearance={{
           elements: {
@@ -96,7 +97,6 @@ function SignUpPage() {
     }}>
       <SignUp 
         path="/sign-up" 
-        routing="path"
         signInUrl="/sign-in"
         appearance={{
           elements: {
@@ -151,14 +151,12 @@ function ProtectedPage({ children }: { children: React.ReactNode }) {
 function App() {
   return (
     <Routes>
-      <Route path="/" element={
-        <ProtectedPage>
-          <Home />
-        </ProtectedPage>
-      } />
+      <Route path="/" element={<Navigate to="/demo" replace />} />
+      <Route path="/demo" element={<HeadlessMagic />} />
+      <Route path="/verify-success" element={<VerifySuccess />} />
       <Route path="/sign-in/*" element={<SignInPage />} />
       <Route path="/sign-up/*" element={<SignUpPage />} />
-      <Route path="*" element={<Navigate to="/" />} />
+      <Route path="*" element={<Navigate to="/demo" replace />} />
     </Routes>
   );
 }
